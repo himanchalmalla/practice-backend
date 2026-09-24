@@ -1,0 +1,46 @@
+services:
+  nginx:
+    image: nginx
+    ports:
+      - 8000:80
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+
+  gateway1:
+    build: ./backend/gateway
+    env_file:
+      - ./backend/gateway/.env
+    environment:
+      - GATEWAY_NAME=First Gateway
+    ports:
+      - 3010:3000
+
+  gateway2:
+    build: ./backend/gateway
+    env_file:
+      - ./backend/gateway/.env
+    environment:
+      - GATEWAY_NAME=Second Gateway
+    ports:
+      - 3011:3000
+
+  auth-service:
+    build: ./backend/services/auth
+    env_file:
+      - ./backend/services/auth/.env
+    ports:
+      - 3002:5000
+
+  order-service:
+    build: ./backend/services/orders
+    env_file:
+      - ./backend/services/orders/.env
+    ports:
+      - 3003:5001
+
+  product-service:  
+    build: ./backend/services/product
+    env_file:
+      - ./backend/services/product/.env
+    ports:
+      - 3004:5002
